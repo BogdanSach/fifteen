@@ -72,7 +72,7 @@ def get_empty_neighbor(index):
 
 def show_victory_plate():
     # Рисуем черный квадрат по центру поля
-    c.create_rectangle(
+    canvas.create_rectangle(
         SQUARE_SIZE / 5,
         SQUARE_SIZE * BOARD_SIZE / 2 - 10 * BOARD_SIZE,
         BOARD_SIZE * SQUARE_SIZE - SQUARE_SIZE / 5,
@@ -81,7 +81,7 @@ def show_victory_plate():
         outline="#FFFFFF",
     )
     # Пишем красным текст Победа
-    c.create_text(
+    canvas.create_text(
         SQUARE_SIZE * BOARD_SIZE / 2,
         SQUARE_SIZE * BOARD_SIZE / 1.9,
         text="ПОБЕДА!",
@@ -110,15 +110,44 @@ def click(event):
         show_victory_plate()
 
 
+def get_inv_count():
+    """Функция считающая количество перемещений"""
+    inversions = 0
+    inversion_board = board[:]
+    inversion_board.remove(EMPTY_SQUARE)
+    for i in range(len(inversion_board)):
+        first_item = inversion_board[i]
+        for j in range(i + 1, len(inversion_board)):
+            second_item = inversion_board[j]
+            if first_item > second_item:
+                inversions += 1
+    return inversions
+
+
+def is_solvable():
+    """Функция определяющая имеет ли головоломка рещение"""
+    num_inversions = get_inv_count()
+    if BOARD_SIZE % 2 != 0:
+        return num_inversions % 2 == 0
+    else:
+        empty_square_row = BOARD_SIZE - (board.index(EMPTY_SQUARE) // BOARD_SIZE)
+        if empty_square_row % 2 == 0:
+            return num_inversions % 2 != 0
+        else:
+            return num_inversions % 2 == 0
+
+
 #  Создаем список блоков
 board = list(range(1, EMPTY_SQUARE + 1))
 # Список с которым мы будем сравнивать результат. В данном случае это
 # просто отсортированный список, но при желании можно придумать что-то другое
 correct_board = board[:]
 # перемешиваем блоки
-shuffle(board)
+while not is_solvable():
+    shuffle(board)
 # рисуем доску
 draw_board()
+
 
 canvas.pack()
 root.mainloop()
