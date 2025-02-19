@@ -70,6 +70,26 @@ def get_empty_neighbor(index):
     return index
 
 
+def show_victory_plate():
+    # Рисуем черный квадрат по центру поля
+    c.create_rectangle(
+        SQUARE_SIZE / 5,
+        SQUARE_SIZE * BOARD_SIZE / 2 - 10 * BOARD_SIZE,
+        BOARD_SIZE * SQUARE_SIZE - SQUARE_SIZE / 5,
+        SQUARE_SIZE * BOARD_SIZE / 2 + 10 * BOARD_SIZE,
+        fill="#000000",
+        outline="#FFFFFF",
+    )
+    # Пишем красным текст Победа
+    c.create_text(
+        SQUARE_SIZE * BOARD_SIZE / 2,
+        SQUARE_SIZE * BOARD_SIZE / 1.9,
+        text="ПОБЕДА!",
+        font="Helvetica {} bold".format(int(10 * BOARD_SIZE)),
+        fill="#DC143C",
+    )
+
+
 def click(event):
     # Зчитуємо координати клика
     x, y = event.x, event.y
@@ -90,6 +110,15 @@ def click(event):
         show_victory_plate()
 
 
-canvas.pack()
+#  Создаем список блоков
+board = list(range(1, EMPTY_SQUARE + 1))
+# Список с которым мы будем сравнивать результат. В данном случае это
+# просто отсортированный список, но при желании можно придумать что-то другое
+correct_board = board[:]
+# перемешиваем блоки
+shuffle(board)
+# рисуем доску
 draw_board()
+
+canvas.pack()
 root.mainloop()
