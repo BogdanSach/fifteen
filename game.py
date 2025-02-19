@@ -51,6 +51,25 @@ def draw_board():
                 )
 
 
+def get_empty_neighbor(index):
+    # получаем индекс пустой клетки в списке
+    empty_index = board.index(EMPTY_SQUARE)
+    # узнаем расстояние от пустой клетки до клетки по которой кликнули
+    abs_value = abs(empty_index - index)
+    # Если пустая клетка над или под клектой на которую кликнули
+    # возвращаем индекс пустой клетки
+    if abs_value == BOARD_SIZE:
+        return empty_index
+    # Если пустая клетка слева или справа
+    elif abs_value == 1:
+        # Проверяем, чтобы блоки были в одном ряду
+        max_index = max(index, empty_index)
+        if max_index % BOARD_SIZE != 0:
+            return empty_index
+    # Рядом с блоком не было пустого поля
+    return index
+
+
 def click(event):
     # Зчитуємо координати клика
     x, y = event.x, event.y
