@@ -51,6 +51,26 @@ def draw_board():
                 )
 
 
+def click(event):
+    # Зчитуємо координати клика
+    x, y = event.x, event.y
+    # Конвертуємо координати з пікселів у клітинки
+    x = x // SQUARE_SIZE
+    y = y // SQUARE_SIZE
+    # Получаем индекс в списке объекта по которому мы нажали
+    board_index = x + (y * BOARD_SIZE)
+    # Получаем индекс пустой клетки в списке. Эту функцию мы напишем позже
+    empty_index = get_empty_neighbor(board_index)
+    # Меняем местами пустую клетку и клетку, по которой кликнули
+    board[board_index], board[empty_index] = board[empty_index], board[board_index]
+    # Перемальовуємо ігрове поле
+    draw_board()
+    # Если текущее состояние доски соответствует правильному - рисуем сообщение о победе
+    if board == correct_board:
+        # Эту функцию мы добавим позже
+        show_victory_plate()
+
+
 canvas.pack()
 draw_board()
 root.mainloop()
